@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     fun getMovies(): Flow<List<Movie>>
-    fun getMovieById(id: Int): Flow<Movie?>
+    fun getMovieById(id: String): Flow<Movie?>
 }
