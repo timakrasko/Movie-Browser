@@ -56,5 +56,8 @@ fun MovieCard(
                 Text(text = movie.overview, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
+        Row(verticalAlignment = Alignment.Bottom) {
+
+        }
     }
 }

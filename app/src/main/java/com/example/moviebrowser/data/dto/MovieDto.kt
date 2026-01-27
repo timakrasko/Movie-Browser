@@ -5,17 +5,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDto(
-    val imdbID: String? = null,
-    val Title: String? = null,
-    val Year: String? = null,
-    val Poster: String? = null,
-    val Plot: String? = null
+    val id: Int,
+    val title: String?,
+    val overview: String?,
+    val poster_path: String?,
+    val release_date: String?
 )
 
 fun MovieDto.toDomain(): Movie = Movie(
-    id = imdbID ?: "",
-    title = Title ?: "No title",
-    posterUrl = Poster ?: "",
-    overview = Plot ?: "",
-    releaseYear = Year ?: "Unknown"
+    id = id,
+    title = title ?: "No title",
+    posterUrl = poster_path?.let { "https://image.tmdb.org/t/p/w500$it" } ?: "",
+    overview = overview ?: "",
+    releaseYear = release_date?.take(4) ?: "Unknown"
 )

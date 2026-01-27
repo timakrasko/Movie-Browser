@@ -12,6 +12,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.moviebrowser.presentation.screen.MovieDetailsScreen
 import com.example.moviebrowser.presentation.screen.MovieListScreen
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -53,13 +54,11 @@ fun NavigationRoot(
                             }
                         )
                     }
-//                    entry<Route.MovieDetails> {
-//                        TodoListScreen(
-//                            onTodoClick = {
-//                                navigator.navigate(Route.TodoDetail(it))
-//                            }
-//                        )
-//                    }
+                    entry<Route.MovieDetails> {
+                        MovieDetailsScreen(
+                            it.id
+                        )
+                    }
                 }
             )
         )
