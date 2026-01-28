@@ -12,14 +12,38 @@ import kotlinx.coroutines.launch
 class MovieListViewModel(
     private val repository: MovieRepository
 ) : ViewModel() {
-    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
-    val movies: StateFlow<List<Movie>> = _movies
+
+    private val _movieListState = MutableStateFlow(MovieListState())
+    val movieListState: StateFlow<MovieListState> = _movieListState
 
     init {
+        loadMovies()
+    }
+
+    private fun loadMovies() {
         viewModelScope.launch {
-            repository.getMovies().collectLatest { movieList ->
-                _movies.value = movieList
+            _movieListState.value = _movieListState.value.copy(isLoading = true, errorMessage = null)
+            try {
+                repository.getMovies().collectLatest { movieList ->
+                    _movieListState.value = MovieListState(
+                        isLoading = false,
+                        errorMessage = null,
+                        movies = movieList
+                    )
+                }
+            } catch (e: Exception) {
+                _movieListState.value = MovieListState(
+                    isLoading = false,
+                    errorMessage = e.message,
+                    movies = emptyList()
+                )
             }
         }
     }
 }
+
+data class MovieListState(
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val movies: List<Movie> = emptyList()
+)

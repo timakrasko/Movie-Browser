@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +25,22 @@ fun MovieListScreen(
     onMovieClick: (Movie) -> Unit
 ) {
     val viewModel: MovieListViewModel = koinViewModel()
-    val movies by viewModel.movies.collectAsState()
+    val state by viewModel.movieListState.collectAsState()
 
-    LazyColumn {
-        items(movies) { movie ->
-            MovieCard(movie = movie, onClick = { onMovieClick(movie) })
+    when {
+        state.isLoading -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(modifier = Modifier.size(48.dp))
+        }
+        state.errorMessage != null -> Text("Error: ${state.errorMessage}")
+        else -> {
+            LazyColumn {
+                items(state.movies) { movie ->
+                    MovieCard(movie = movie, onClick = { onMovieClick(movie) })
+                }
+            }
         }
     }
 }

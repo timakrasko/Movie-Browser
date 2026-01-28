@@ -6,16 +6,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.NavKey
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.moviebrowser.presentation.screen.FavoritesScreen
 import com.example.moviebrowser.presentation.screen.MovieDetailsScreen
 import com.example.moviebrowser.presentation.screen.MovieListScreen
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
 
 
 @Composable
@@ -26,9 +22,11 @@ fun NavigationRoot(
         startRoute = Route.MovieList,
         topLevelRoutes = TOP_LEVEL_DESTINATION.keys
     )
+
     val navigator = remember {
         Navigator(navigationState)
     }
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -54,9 +52,18 @@ fun NavigationRoot(
                             }
                         )
                     }
+
                     entry<Route.MovieDetails> {
                         MovieDetailsScreen(
                             it.id
+                        )
+                    }
+
+                    entry<Route.Favorite> {
+                        FavoritesScreen(
+                            onMovieClick = {
+                                navigator.navigate(Route.MovieDetails(it.id ))
+                            }
                         )
                     }
                 }
