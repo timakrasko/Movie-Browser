@@ -15,9 +15,16 @@ class MovieListViewModel(
 
     private val _movieListState = MutableStateFlow(MovieListState())
     val movieListState: StateFlow<MovieListState> = _movieListState
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
 
     init {
         loadMovies()
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+        searchMovies(query)
     }
 
     private fun loadMovies() {
@@ -25,6 +32,28 @@ class MovieListViewModel(
             _movieListState.value = _movieListState.value.copy(isLoading = true, errorMessage = null)
             try {
                 repository.getMovies().collectLatest { movieList ->
+                    _movieListState.value = MovieListState(
+                        isLoading = false,
+                        errorMessage = null,
+                        movies = movieList
+                    )
+                }
+            } catch (e: Exception) {
+                _movieListState.value = MovieListState(
+                    isLoading = false,
+                    errorMessage = e.message,
+                    movies = emptyList()
+                )
+            }
+        }
+    }
+
+    fun searchMovies(query: String) {
+        viewModelScope.launch {
+            _movieListState
+                .value = _movieListState.value.copy(isLoading = true, errorMessage = null)
+            try {
+                repository.searchMovies(query).collectLatest { movieList ->
                     _movieListState.value = MovieListState(
                         isLoading = false,
                         errorMessage = null,

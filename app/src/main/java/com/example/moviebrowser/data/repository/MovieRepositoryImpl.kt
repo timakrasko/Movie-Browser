@@ -1,7 +1,6 @@
 package com.example.moviebrowser.data.repository
 
 import com.example.moviebrowser.data.api.TmdbApiService
-
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.example.moviebrowser.data.dto.toDomain
@@ -19,9 +18,8 @@ class MovieRepositoryImpl(
     }
 
     override fun getMovieById(id: Int): Flow<Movie?> = flow {
-        val moviesResponse = api.getPopularMovies(apiKey)
-        val movie = moviesResponse.results.find { it.id == id }?.toDomain()
-        emit(movie)
+        val response = api.getMovieDetails(id, apiKey)
+        emit(response.toDomain())
     }
 
     override fun searchMovies(query: String): Flow<List<Movie>> = flow {

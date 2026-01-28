@@ -36,7 +36,7 @@ fun FavoritesScreen(
         }
         favorites.isEmpty() -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Улюблених фільмів немає")
+                Text("There is no favorite movies")
             }
         }
         else -> {
