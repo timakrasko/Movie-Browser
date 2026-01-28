@@ -3,7 +3,6 @@ package com.example.moviebrowser.naigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavItem (
@@ -17,4 +16,8 @@ val TOP_LEVEL_DESTINATION = mapOf(
         title = "Movies"
     ),
 
+    Route.Favorite to BottomNavItem(
+        icon = Icons.Outlined.Favorite,
+        title = "Favorite"
+    )
 )

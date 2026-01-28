@@ -3,6 +3,7 @@ package com.example.moviebrowser.di
 import com.example.moviebrowser.data.api.TmdbApiService
 import com.example.moviebrowser.data.repository.MovieRepository
 import com.example.moviebrowser.data.repository.MovieRepositoryImpl
+import com.example.moviebrowser.presentation.viewModel.FavoritesViewModel
 import com.example.moviebrowser.presentation.viewModel.MovieDetailsViewModel
 import com.example.moviebrowser.presentation.viewModel.MovieListViewModel
 import org.koin.core.module.dsl.viewModel
@@ -21,4 +22,5 @@ val appModule = module {
     single<MovieRepository> { MovieRepositoryImpl(get(), "b493492000673e32c655001342ab405e") }
     viewModel { MovieListViewModel(get()) }
     viewModel { (movieId: Int) -> MovieDetailsViewModel(get(), movieId) }
+    viewModel { FavoritesViewModel() }
 }
