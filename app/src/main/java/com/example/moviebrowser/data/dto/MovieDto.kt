@@ -1,6 +1,6 @@
 package com.example.moviebrowser.data.dto
 
-import com.example.moviebrowser.domain.Movie
+import com.example.moviebrowser.domain.model.Movie
 import kotlinx.serialization.Serializable
 
 @Serializable

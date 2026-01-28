@@ -5,7 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("kotlin-kapt")
 }
+
+apply(plugin = "org.jetbrains.kotlin.kapt")
 
 android {
     namespace = "com.example.moviebrowser"
@@ -73,7 +76,10 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation("com.squareup.okhttp3:logging-interceptor:5.3.2")
+    implementation(libs.logging.interceptor)
+    implementation (libs.androidx.room.runtime)
+    kapt (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     runtimeOnly(libs.androidx.material.icons.extended)

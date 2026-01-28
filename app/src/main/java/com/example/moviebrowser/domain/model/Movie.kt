@@ -1,4 +1,4 @@
-package com.example.moviebrowser.domain
+package com.example.moviebrowser.domain.model
 
 data class Movie(
     val id: Int,

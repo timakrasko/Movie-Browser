@@ -11,7 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.moviebrowser.domain.Movie
+import com.example.moviebrowser.domain.model.Movie
 import com.example.moviebrowser.presentation.viewModel.FavoritesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -21,6 +21,7 @@ fun FavoritesScreen(
 ) {
     val viewModel: FavoritesViewModel = koinViewModel()
     val state by viewModel.favoritesState.collectAsState()
+    val favorites by viewModel.favorites.collectAsState()
 
     when {
         state.isLoading -> {
@@ -33,17 +34,19 @@ fun FavoritesScreen(
                 Text("Error: ${state.errorMessage}")
             }
         }
-        state.favorites.isEmpty() -> {
+        favorites.isEmpty() -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Улюблених фільмів немає")
             }
         }
         else -> {
             LazyColumn {
-                items(state.favorites) { movie ->
+                items(favorites) { movie ->
                     MovieCard(
                         movie = movie,
-                        onClick = { onMovieClick(movie) }
+                        isFavorite = true,
+                        onClick = { onMovieClick(movie) },
+                        onFavoriteClick = { viewModel.removeFromFavorites(movie.id) }
                     )
                 }
             }

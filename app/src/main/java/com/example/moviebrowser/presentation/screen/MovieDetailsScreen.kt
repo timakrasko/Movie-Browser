@@ -1,5 +1,6 @@
 package com.example.moviebrowser.presentation.screen
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -31,11 +33,16 @@ fun MovieDetailsScreen(
     val detailsViewModel: MovieDetailsViewModel = koinViewModel(parameters = { parametersOf(movieId) })
     val state by detailsViewModel.movieDetailsState.collectAsState()
     val favoritesViewModel: FavoritesViewModel = koinViewModel()
+    val favorites by favoritesViewModel.favorites.collectAsState()
 
     if (state.isLoading) {
-        CircularProgressIndicator()
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
     } else if (state.movie != null) {
         val movie = state.movie
+        val isFavorite = favorites.any { it.id == movie!!.id }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,20 +56,21 @@ fun MovieDetailsScreen(
             Text(text = movie.overview)
 
             IconButton(onClick = {
-                if (movie.isFavorite) {
+                if (isFavorite) {
                     favoritesViewModel.removeFromFavorites(movie.id)
                 } else {
                     favoritesViewModel.addToFavorites(movie)
                 }
             }) {
                 Icon(
-                    imageVector = if (movie.isFavorite) Icons.Filled.Favorite
-                    else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "В улюблене"
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = if (isFavorite) "Remove from favorite" else "Add to favorite"
                 )
             }
         }
     } else {
-        Text("Movie not found")
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Movie not found")
+        }
     }
 }

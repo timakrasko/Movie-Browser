@@ -1,6 +1,10 @@
 package com.example.moviebrowser.di
 
+import androidx.room.Room
 import com.example.moviebrowser.data.api.TmdbApiService
+import com.example.moviebrowser.data.db.AppDatabase
+import com.example.moviebrowser.data.repository.FavoriteRepository
+import com.example.moviebrowser.data.repository.FavoriteRepositoryImpl
 import com.example.moviebrowser.data.repository.MovieRepository
 import com.example.moviebrowser.data.repository.MovieRepositoryImpl
 import com.example.moviebrowser.presentation.viewModel.FavoritesViewModel
@@ -19,8 +23,17 @@ val appModule = module {
             .build()
             .create(TmdbApiService::class.java)
     }
+    single {
+        Room.databaseBuilder(
+            get(),
+            AppDatabase::class.java,
+            "movies_db"
+        ).build()
+    }
+    single { get<AppDatabase>().favoriteMovieDao() }
     single<MovieRepository> { MovieRepositoryImpl(get(), "b493492000673e32c655001342ab405e") }
+    single<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
     viewModel { MovieListViewModel(get()) }
     viewModel { (movieId: Int) -> MovieDetailsViewModel(get(), movieId) }
-    viewModel { FavoritesViewModel() }
+    viewModel { FavoritesViewModel(get()) }
 }

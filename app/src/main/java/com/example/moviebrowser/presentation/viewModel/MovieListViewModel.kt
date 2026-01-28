@@ -3,7 +3,7 @@ package com.example.moviebrowser.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviebrowser.data.repository.MovieRepository
-import com.example.moviebrowser.domain.Movie
+import com.example.moviebrowser.domain.model.Movie
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
